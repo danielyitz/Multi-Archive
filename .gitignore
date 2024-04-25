@@ -1,0 +1,11 @@
+/code_files/Python/.idea/
+/code_files/Python/__pycache__/
+/code_files/Python/venv/
+/code_files/Python/build/
+
+/data_files/temp_data/
+/data_files/error_data/
+/data_files/main_data/archive_thumbnails/
+/data_files/main_data/data_file.json
+/data_files/backups_data/
+/data_files/csv_data/
