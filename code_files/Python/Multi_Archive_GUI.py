@@ -96,54 +96,6 @@ class MultiArchiveGUI:
         try:
             with open(ARCHIVE_DATA_PATH, 'r') as file:
                 self.archive = jsonpickle.decode(json.load(file))
-
-                # convert the labels list to a dictionary
-                # if type(self.archive.labels) == list:
-                #     print("not ")
-                #     self.archive.labels = {label.get_name(): label for label in self.archive.labels}
-                #     self.save_archive()
-                # print("labels ", self.archive.labels.keys())
-                # for item in self.archive.items:
-                #     if type(item.labels) == str:
-                #         print("before ", item)
-                #         item.labels = {}
-                #         print("after ", item)
-                #     item_labels_new = {}
-                #     if type(item.labels) == list:
-                #         print("before ", item)
-                #
-                #         for label in item.labels:
-                #             if type(label) == str:
-                #                 if label in self.archive.labels.keys():
-                #                     item_labels_new[label] = self.archive.labels[label]
-                #
-                #             elif type(label) == Label:
-                #                 item_labels_new[label.get_name()] = label
-                #             else:
-                #                 print("error ", item)
-                #                 exit(1)
-                #
-                #
-                #         item.labels = item_labels_new
-                #         print("after ", item)
-                # for item in self.archive.items:
-                #     self.archive.add_new_item(name=item.name,
-                #                               date=item.date,
-                #                               dest_path=item.dest_path,
-                #                               name_of_charge="",
-                #                               labels=item.labels,
-                #                               free_text=item.free_text,
-                #                               thumbnail_path="",
-                #                               palga="",
-                #                               operation="",
-                #                               pikud="",
-                #                               id=item.id)
-                #     self.archive.remove_item(item)
-                # for item in self.archive.items:
-                #     if item.id == 11 or item.id == 19 or item.id == 26:
-                #         print(item.id)
-                #         self.archive.remove_item(item)
-
                 self.logs_file =  open(ARCHIVE_ERROR_DATA_PATH, 'a', encoding='utf-8') 
 
                 # Redirect stdout to the file
@@ -220,20 +172,12 @@ class MultiArchiveGUI:
         self.search_by_labels_frame.grid_columnconfigure(4, weight=1)
         self.search_by_labels_frame.grid_rowconfigure(0, weight=0)
         self.search_by_labels_frame.grid(row=3, column=0, pady=5, padx=0, columnspan=5, sticky="nsew")
-        #
-        # self.chosen_labels_frame_manager = tk.CTkFrame(self.search_by_labels_frame, height=50, width=1, border_width=2)
-        # self.chosen_labels_frame_manager.grid(row=0, column=0, pady=5, padx=10, columnspan=5, sticky="nsew")
-        #
         self.search_labels_frame_manager = tk.CTkFrame(self.search_frame, height=50, width=1, border_width=2)
-        # self.search_labels_frame_manager.grid(row=1, column=0, pady=5, padx=10, columnspan=5, sticky="nsew")
 
         self.chosen_labels_frame_manager = ArchiveLabelsFrame(self.search_by_labels_frame, self,
                                                               self.search_labels_frame_manager)
-        # tk.CTkFrame(self.search_by_labels_frame, height=50, width=1, border_width=2)
         self.chosen_labels_frame_manager.grid(row=0, column=0, pady=5, padx=10, columnspan=5, sticky="nsew")
 
-        # self.labels_frame(self.chosen_labels_frame_manager, self.search_labels_frame_manager,
-        #                   self.search_by_labels_frame, self.search_frame)
 
         self.advanced_search_button = tk.CTkButton(self.search_frame, text="חיפוש מתקדם",
                                                    command=self.advanced_search_by,
@@ -243,7 +187,6 @@ class MultiArchiveGUI:
         # ------------------------------------ advanced search frame ------------------------------------
 
         self.advanced_search_frame = tk.CTkFrame(self.manager_window, border_width=2)
-        # self.advanced_search_frame.grid(row=1, column=0, padx=20, sticky="nsew")
         self.advanced_search_frame.columnconfigure(0, weight=1)
 
         self.search_by_name_of_charge_label = tk.CTkLabel(self.advanced_search_frame, text="שם הפורק",
@@ -304,36 +247,6 @@ class MultiArchiveGUI:
         self.scrollbar.grid(row=0, column=0, pady=5, padx=10, sticky="nsew")
         self.show_unloadings()
 
-    # def labels_frame(self, chosen_labels_frame, search_label_frame, parent_frame, parent_frame_2):
-    #     # self.chosen_labels_frame = tk.CTkFrame(parent_frame, height=50, width=1, border_width=2)
-    #     # self.chosen_labels_frame.grid(row=0, column=0, pady=5, padx=10, columnspan=5, sticky="nsew")
-    #
-    #     chosen_labels_frame.grid_columnconfigure(4, weight=1)
-    #     chosen_labels_frame.grid_columnconfigure(3, weight=1)
-    #     chosen_labels_frame.grid_columnconfigure(2, weight=1)
-    #     chosen_labels_frame.grid_columnconfigure(1, weight=1)
-    #     chosen_labels_frame.grid_columnconfigure(0, weight=1)
-    #     chosen_labels_frame.grid_rowconfigure(0, weight=1)
-    #
-    #     self.favorite_labels_buttons = {}
-    #     self.fill_labels_frame(parent_frame, 1, chosen_labels_frame=chosen_labels_frame)
-    #
-    #     self.show_more_labels_button = ArchiveButton(parent_frame, text="הצג תוויות נוספות",
-    #                                                  command=lambda:
-    #                                                  self.show_more_labels(parent_frame,  # todo: fixitttttttt
-    #                                                                        2 + int(
-    #                                                                            self.favorite_labels_buttons.__len__()
-    #                                                                            / LABELS_IN_ROW),
-    #                                                                        chosen_labels_frame=chosen_labels_frame))
-    #     self.show_more_labels_button.grid(row=3, column=0, pady=5, padx=10, sticky="ns", columnspan=3)
-    #
-    #     # self.search_labels_frame = tk.CTkFrame(parent_frame_2, border_width=0, height=60)
-    #
-    #     self.search_for_labels_button = ArchiveButton(parent_frame, text="חפש תוויות",
-    #                                                   command=lambda: self.search_labels(
-    #                                                       search_labels_frame=search_label_frame,
-    #                                                       chosen_labels_frame=chosen_labels_frame, row=4, columnspan=5))
-    #     self.search_for_labels_button.grid(row=3, column=3, pady=5, padx=10, sticky="ns", columnspan=3)
 
     def open_new_unloading(self):
         # checks if there is already a window open
@@ -352,30 +265,7 @@ class MultiArchiveGUI:
         # self.config_unloading_window_1()
         self.new_unloading_window_1.deiconify()
 
-    # def open_unloading_details(self, item):
-    #
-    #     self.open_new_unloading()
-    #     self.new_unloading_window.configure(title="פרטי פריקה")
-    #     self.done_button.configure(text="עדכן", command=self.update_unloading)
-    #     self.unload_name_entry.insert(0, item.name)
-    #     self.unload_date_entry.delete(0, "end")
-    #     self.unload_date_entry.insert(0, item.date)
-    #     self.unloader_name_entry.insert(0, item.name_of_charge)
-    #     self.dest_entry.insert(0, item.dest_path)
-    #     self.free_text_entry.insert(0, item.free_text)
-    #     self.labels = item.labels
-    #     self.textbox.configure(state="normal")
-    #     self.textbox.insert("0.0", list_to_string(self.labels) + ", ")
-    #     self.textbox.configure(state="disabled")
 
-    # def update_unloading(self):
-    #     # self.archive.update_item(str(self.unload_name_entry.get()), str(self.unload_date_entry.get()),
-    #     #                          str(self.dest_entry.get()), str(self.unloader_name_entry.get()),
-    #     #                          self.labels, str(self.free_text_entry.get()))
-    #     self.save_archive()
-    #     self.new_unloading_window.destroy()
-    #     self.manager_window.destroy()
-    #     self.open_manager()
 
     def done(self):  # transfer the unloading to the archive
 
@@ -398,12 +288,8 @@ class MultiArchiveGUI:
                                   operation=self.temp_item["operation"],
                                   pikud=self.temp_item["pikud"])
 
-        # self.archive.add_new_item(str(self.unload_name_entry.get()), str(self.unload_date_entry.get()),
-        #                           str(self.dest_entry.get()), str(self.unloader_name_entry.get()),
-        #                           self.labels, str(self.info_entry.get()))
+
         self.save_archive()
-        # print("The archive is: ")
-        # self.archive.print_archive()
         # refresh the manager
         self.reconfigure_unloadings_frame()
 
@@ -421,22 +307,7 @@ class MultiArchiveGUI:
         self.dest_entry.insert(0, dest_dir)
         self.dest_entry.configure(state="disabled")
 
-    # def add_new_label(self, chosen_labels_frame):
-    #     dialog = tk.CTkInputDialog(text="שם התווית", title="הוסף תווית חדשה", font=("Arial", 15))
-    #     name_of_new_label = dialog.get_input()
-    #     try:
-    #         new_label = self.archive.add_label(name_of_new_label)  # todo: add info
-    #     except ValueError as e:
-    #         msg = CTkMessagebox(title="Error", message=str(e), font=("Arial", 15),
-    #                             option_1="Cancel", option_2="נסה שוב")
-    #         response = msg.get()
-    #         if response == "נסה שוב":
-    #             self.add_new_label(chosen_labels_frame=chosen_labels_frame)
-    #
-    #         return
-    #
-    #     self.choose_label(new_label, chosen_labels_frame=chosen_labels_frame)
-    #     self.save_archive()
+
 
     def run(self):
         self.manager_window.mainloop()
@@ -492,16 +363,7 @@ class MultiArchiveGUI:
                                                              self.search_by_name_of_palga_entry.get(),
 
                                                              self.search_by_free_text_entry.get())
-        # self.unloading_frame.destroy()
-        # self.unloading_frame = tk.CTkFrame(self.manager_window, border_width=2)
-        # self.unloading_frame.grid(row=4, column=0, pady=20, padx=20, sticky="nsew")
-        # self.unloading_frame.grid_columnconfigure(0, weight=1)
-        # self.unloading_frame.grid_rowconfigure(0, weight=1)
-        # self.scrollbar.destroy()
-        # self.scrollbar = tk.CTkScrollableFrame(self.unloading_frame, height=700)
-        # self.scrollbar.grid(row=0, column=0, pady=5, padx=10, sticky="nsew")
-        # self.scrollbar.grid_columnconfigure(0, weight=1)
-        # self.show_unloadings()
+
         self.reconfigure_unloadings_frame()
 
         pass
@@ -574,7 +436,6 @@ class MultiArchiveGUI:
                 self.show_error("נתיב היעד אינו תקין")
                 return
             self.new_unloading_window_1.withdraw()
-            # self.new_unloading_window_1.destroy()
             self.move_to_stage(2)
 
         elif current_stage == 2:
@@ -742,31 +603,6 @@ class MultiArchiveGUI:
         # tk.CTkFrame(second_frame, border_width=2, height=60)
         self.chosen_labels_frame_unload.grid(row=1, column=0, pady=5, padx=10, sticky="ew", columnspan=6)
 
-        # favorite_labels_label = ArchiveLabel(second_frame, text=":תוויות נפוצות")
-        # favorite_labels_label.grid(row=2, column=LABELS_IN_ROW, pady=5, padx=10, sticky="ns")
-        #
-        # self.fill_labels_frame(second_frame, row=2, chosen_labels_frame=self.chosen_labels_frame_unload)
-        #
-        # self.show_more_labels_button = ArchiveButton(second_frame, text="הצג תוויות נוספות",
-        #                                              command=lambda:
-        #                                              self.show_more_labels(second_frame,
-        #                                                                    2 + int(
-        #                                                                        self.favorite_labels_buttons.__len__()
-        #                                                                        / LABELS_IN_ROW),
-        #                                                                    chosen_labels_frame=self.chosen_labels_frame_unload))
-        # self.show_more_labels_button.grid(row=3, column=0, pady=5, padx=10, sticky="ns", columnspan=3)
-        #
-        # self.search_labels_frame_unload = tk.CTkFrame(self.new_unloading_window_2, border_width=0, height=60)
-        #
-        # self.search_for_labels_button = \
-        #     ArchiveButton(second_frame, text="חפש תוויות",
-        #                   command=lambda:
-        #                   self.search_labels(search_labels_frame=
-        #                                      self.chosen_labels_frame_unload,
-        #                                      chosen_labels_frame=
-        #                                      self.chosen_labels_frame_unload,
-        #                                      row=4, columnspan=5))
-        # self.search_for_labels_button.grid(row=3, column=3, pady=5, padx=10, sticky="ns", columnspan=3)
 
         # ------------------------------------ image frame ------------------------------------
         self.image_frame = tk.CTkFrame(self.new_unloading_window_2, border_width=2)
@@ -785,10 +621,7 @@ class MultiArchiveGUI:
         self.thumbnail_path_entry.grid(row=2, column=0, pady=5, padx=10, sticky="ew")
 
         # ------------------------------------ forth frame ------------------------------------
-        # self.new_unloading_window_2.rowconfigure(0, weight=1)
-        # self.new_unloading_window_2.rowconfigure(1, weight=1)
-        # self.new_unloading_window_2.rowconfigure(2, weight=1)
-        # self.new_unloading_window_2.rowconfigure(3, weight=1)
+
         self.new_unloading_window_2.rowconfigure(4, weight=1)
 
         forth_frame = tk.CTkFrame(self.new_unloading_window_2, border_width=2)
@@ -817,34 +650,6 @@ class MultiArchiveGUI:
             self.image_label = tk.CTkLabel(self.image_frame, image=self.chosen_image, text="")
             self.image_label.grid(row=3, column=0, pady=5, padx=10, sticky="ew")
 
-    # def search_labels(self, search_labels_frame, chosen_labels_frame, row=2, column=0, columnspan=1):
-    #     search_labels_frame.grid(row=row, column=column, pady=(0, 10), padx=10, sticky="nsew",
-    #                              columnspan=columnspan)
-    #     search_labels_frame.grid_columnconfigure(0, weight=1)
-    #     search_labels_frame.grid_columnconfigure(1, weight=1)
-    #     search_labels_frame.grid_columnconfigure(2, weight=1)
-    #     search_labels_frame.grid_columnconfigure(3, weight=1)
-    #     search_labels_frame.grid_columnconfigure(4, weight=1)
-    #     search_labels_frame.grid_columnconfigure(5, weight=1)
-    #
-    #     self.search_by_name_label = ArchiveLabel(search_labels_frame, text="שם התווית")
-    #     self.search_by_name_label.grid(row=0, column=5, pady=5, padx=10, sticky="e")
-    #
-    #     self.search_by_name_entry = ArchiveEntry(search_labels_frame)
-    #     self.search_by_name_entry.grid(row=0, column=4, pady=5, padx=10, sticky="ew")
-    #
-    #     self.search_by_name_button = ArchiveButton(search_labels_frame, text="חפש תווית",
-    #                                                command=lambda: self.show_labels_contains(
-    #                                                    self.search_by_name_entry.get(),
-    #                                                    chosen_labels_frame=chosen_labels_frame,
-    #                                                    search_labels_frame=search_labels_frame))
-    #     self.search_by_name_button.grid(row=0, column=3, pady=5, padx=10, sticky="ew")
-    #
-    #     self.add_new_label_button = ArchiveButton(search_labels_frame, text="הוסף תווית חדשה",
-    #                                               command=lambda: self.add_new_label(
-    #                                                   chosen_labels_frame=chosen_labels_frame))
-    #     self.add_new_label_button.grid(row=0, column=0, pady=5, padx=10, sticky="ew")
-    #     pass
 
     def config_unloading_window_3(self):
         self.new_unloading_window_3 = ArchiveTopLevelWindow(self.manager_window, self.archive, "פריקה חדשה")
@@ -918,7 +723,6 @@ class MultiArchiveGUI:
         self.returned = True
         if current_stage == 2:
             self.update_temp_item(2)
-            # self.new_unloading_window_2.destroy()
             self.new_unloading_window_2.withdraw()
 
             self.move_to_stage(1)
@@ -926,7 +730,6 @@ class MultiArchiveGUI:
             self.update_temp_item(3)
             self.new_unloading_window_3.withdraw()
 
-            # self.new_unloading_window_3.destroy()
             self.move_to_stage(2)
 
     def fill_stage(self, current_stage):
@@ -940,13 +743,7 @@ class MultiArchiveGUI:
             fill_path_entry(self.src_entry, self.temp_item["src_path"])
             fill_path_entry(self.dest_entry, self.temp_item["dest_path"])
         elif current_stage == 2:  # todo: support return
-            # fill_path_entry(self.thumbnail_path_entry, self.temp_item["thumbnail_user_path"])
-            # if self.temp_item["thumbnail_user_path"]:
-            #    self.image_label.grid(row=3, column=0, pady=5, padx=10, sticky="ew")
-            #
-            # self.chosen_labels = self.temp_item["labels"]
-            # for label in self.chosen_labels:
-            #    self.choose_label(label)
+
             pass
 
         elif current_stage == 3:
@@ -955,77 +752,7 @@ class MultiArchiveGUI:
             self.unload_operation_entry.set(self.temp_item["operation"])
             self.unload_pikud_entry.set(self.temp_item["pikud"])
 
-    # def fill_labels_frame(self, frame, row, chosen_labels_frame):
-    #     labels = self.archive.get_favorite_labels(start=self.favorite_labels_buttons.__len__())
-    #     col = labels.__len__()
-    #     self.organize_labels(labels, frame, row, col, self.favorite_labels_buttons, chosen_labels_frame)
 
-    # def organize_labels(self, labels, frame, row, col, buttons_dict, chosen_labels_frame):
-    #     labels_in_row = col
-    #
-    #     for label in labels:
-    #         col = col - 1
-    #         if col < 0:
-    #             col = labels_in_row - 1
-    #             row = row + 1
-    #
-    #         label_button = ArchiveLabelButton(frame, text=label.name,
-    #                                           command=lambda: self.choose_label(label, chosen_labels_frame),
-    #                                           label=label, archiveGUI=self, coordinates=(row, col),
-    #                                           chosen_labels_frame=chosen_labels_frame)
-    #         buttons_dict[label.name] = label_button
-    #         if not self.chosen_labels_buttons.get(label.name):
-    #             label_button.grid(row=row, column=col, pady=5, padx=10, sticky="ns")
-    #
-    # def show_labels_contains(self, name, chosen_labels_frame, search_labels_frame):
-    #     labels = self.archive.get_labels_contains(name)
-    #     for name, button in self.searched_labels_buttons.items():
-    #         button.grid_forget()
-    #
-    #     self.searched_labels_buttons = {}
-    #     self.organize_labels(labels, search_labels_frame, 1, LABELS_IN_ROW, self.searched_labels_buttons,
-    #                          chosen_labels_frame)
-    #
-    #     pass
-    #
-    # def show_more_labels(self, frame, last_row, chosen_labels_frame):
-    #     self.fill_labels_frame(frame, row=last_row + 1, chosen_labels_frame=chosen_labels_frame)
-    #     self.show_more_labels_button.grid_forget()
-    #     self.search_for_labels_button.grid_forget()
-    #     self.show_more_labels_button.grid(row=last_row + 2, column=0, pady=5, padx=10, sticky="ns", columnspan=3)
-    #     self.search_for_labels_button.grid(row=last_row + 2, column=3, pady=5, padx=10, sticky="ns", columnspan=3)
-    #
-    # def choose_label(self, label, chosen_labels_frame):
-    #     row = math.floor(self.chosen_labels.__len__() / LABELS_IN_ROW)
-    #     col = self.chosen_labels.__len__() % LABELS_IN_ROW
-    #     self.chosen_labels.append(label)
-    #
-    #     self.chosen_labels_buttons[label.name] = ArchiveLabelButton(chosen_labels_frame, text=label.name,
-    #                                                                 command=lambda: self.unchoose_label(label),
-    #                                                                 label=label, archiveGUI=self,
-    #                                                                 chosen_labels_frame=chosen_labels_frame)
-    #     self.chosen_labels_buttons[label.name].configure(command=lambda: self.unchoose_label(label))
-    #     self.chosen_labels_buttons[label.name].grid(row=row, column=col,
-    #                                                 pady=5, padx=10, sticky="ns")
-    #     if self.favorite_labels_buttons.get(label.name):
-    #         self.favorite_labels_buttons[label.name].grid_forget()
-    #     if self.searched_labels_buttons.get(label.name):
-    #         self.searched_labels_buttons[label.name].grid_forget()
-    #
-    # def unchoose_label(self, label):
-    #     if self.favorite_labels_buttons.get(label.name):
-    #         coordinates = self.favorite_labels_buttons[label.name].coordinates
-    #         self.favorite_labels_buttons[label.name].grid(row=coordinates[0], column=coordinates[1],
-    #                                                       pady=5, padx=10, sticky="ns")
-    #
-    #     if self.searched_labels_buttons.get(label.name):
-    #         coordinates = self.searched_labels_buttons[label.name].coordinates
-    #         self.searched_labels_buttons[label.name].grid(row=coordinates[0], column=coordinates[1],
-    #                                                       pady=5, padx=10, sticky="ns")
-    #
-    #     self.chosen_labels_buttons[label.name].grid_forget()
-    #     self.chosen_labels_buttons.pop(label.name)
-    #     self.chosen_labels.remove(label)
 
     def show_error(self, message):
         ArchiveError(title="שגיאה בפריקה", message=message)
@@ -1033,18 +760,12 @@ class MultiArchiveGUI:
     def move_to_stage(self, desired_stage):
         if desired_stage == 1:
             self.new_unloading_window_1.deiconify()
-            # self.config_unloading_window_1()
-            # self.fill_stage(1)
         elif desired_stage == 2:
             self.new_unloading_window_2.deiconify()
 
-            # self.config_unloading_window_2()
-            # self.fill_stage(2)
         elif desired_stage == 3:
             self.new_unloading_window_3.deiconify()
 
-            # self.config_unloading_window_3()
-            # self.fill_stage(3)
 
     def reconfigure_unloadings_frame(self):
         self.unloading_frame.destroy()
@@ -1124,8 +845,6 @@ class ItemDetailsWindow(tk.CTkToplevel):
         self.item_open_button = ArchiveButton(self, text="פתח תיקייה", command=self.open_folder)
         self.item_open_button.grid(row=1, column=0, pady=5, padx=10, sticky="ew", columnspan=2)
 
-        # self.item_edit_button = ArchiveButton(self, text="מחק פריקה", command=self.edit_item)
-        # self.item_edit_button.grid(row=2, column=0, pady=5, padx=10, sticky="ew", columnspan=2)
 
     def get_item_extra_details(self):
         extra_details_text = ""
@@ -1444,19 +1163,6 @@ class ArchiveWarning(CTkMessagebox):
                          icon="warning", option_1="המשך בכל זאת", option_2="Cancel")
         self.continue_anyway_message = "המשך בכל זאת"
 
-
-# def remove_duplicates(my_list):
-#     for i in range(my_list.__len__()):
-#         print("i = ", my_list[i].name)
-#
-#     for i in range(my_list.__len__()):
-#         for j in range(i + 1, my_list.__len__()):
-#             if my_list[i] == my_list[j]:
-#                 my_list.pop(j)
-#                 remove_duplicates(my_list)
-#                 return my_list
-
-    # return my_list
 
 
 def validate_input(user_input, validity_function):
