@@ -488,6 +488,25 @@ class MultiArchiveGUI:
             # self.manager_window.destroy()
             # self.open_manager()
 
+    def exit_unloading(self):
+
+        msg = ArchiveWarning(title="שגיאה", message="הפריקה החדשה תימחק")
+        response = msg.get()
+        if response != msg.continue_anyway_message:
+            return
+        else:
+            self.in_middle_of_unloading = False
+            self.reconfigure_unloading_windows()
+            # print("המשיך")
+
+
+        pass
+
+    def destroy_unloading_windows(self):
+        self.new_unloading_window_1.destroy()
+        self.new_unloading_window_2.destroy()
+        self.new_unloading_window_3.destroy()
+
     def config_unloading_window_1(self):
         self.new_unloading_window_1 = ArchiveTopLevelWindow(self.manager_window, self.archive, "פריקה חדשה")
         self.new_unloading_window_1.rowconfigure(0, weight=-0)
@@ -561,6 +580,7 @@ class MultiArchiveGUI:
         self.next_button.grid(row=0, column=0, pady=5, padx=10, sticky="ns")
 
         self.new_unloading_window_1.withdraw()
+        self.new_unloading_window_1.protocol("WM_DELETE_WINDOW", self.exit_unloading)
 
     def config_unloading_window_2(self):
         self.new_unloading_window_2 = ArchiveTopLevelWindow(self.manager_window, self.archive, "פריקה חדשה",
@@ -636,6 +656,8 @@ class MultiArchiveGUI:
         self.return_button.grid(row=0, column=1, pady=5, padx=10, sticky="e")
 
         self.new_unloading_window_2.withdraw()
+        self.new_unloading_window_2.protocol("WM_DELETE_WINDOW", self.exit_unloading)
+
 
     def select_image(self):
         self.image_path = filedialog.askopenfilename(filetypes=IMAGE_TYPES)
@@ -718,6 +740,8 @@ class MultiArchiveGUI:
         self.next_button.grid(row=0, column=1, pady=5, padx=10, sticky="e")
 
         self.new_unloading_window_3.withdraw()
+        self.new_unloading_window_3.protocol("WM_DELETE_WINDOW", self.exit_unloading)
+
 
     def return_stage(self, current_stage):
         self.returned = True
