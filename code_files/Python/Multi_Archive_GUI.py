@@ -42,6 +42,8 @@ def copy_files(src, dest):
         if os.path.isfile(src + "/" + file):
             shutil.copy2(src + "/" + file, dest)
 
+
+
     # for file in os.listdir(src):
     #     if os.path.isfile(src + "/" + file):
     #         shutil.copy2(src + "/" + file, dest)
@@ -64,6 +66,11 @@ def create_empty_folder(folder_path):
     # open the new folder
     os.startfile(folder_path)
 
+def dir_contains_dir(dir_path):
+    for item in os.listdir(dir_path):
+        if os.path.isdir(os.path.join(dir_path, item)):
+            return True
+    return False
 
 class MultiArchiveGUI:
     def __init__(self):
@@ -318,6 +325,8 @@ class MultiArchiveGUI:
         # print(self.archive.__str__())
         # print(self.archive.get_items_dic())
         self.archive.make_data()
+        self.save_archive()
+
         print("end of run ", datetime.now())
         print("_______________________________________________________________________")
         self.logs_file.close()
@@ -474,11 +483,15 @@ class MultiArchiveGUI:
 
                 if self.temp_item["src_path"]:
                     # copy the files from the source to the destination in the background
+                    if dir_contains_dir(self.temp_item["src_path"]):
+                        self.show_error("שימו לב כי יש תיקיות בתיקיית המקור שלא יועברו")
                     copy_files_thread(self.temp_item["src_path"], dest_path)
+
                 else:
                     # create a new empty folder
                     create_empty_folder(dest_path)
             except OSError as e:
+                print(e)
                 self.show_error("שגיאה ביצירת תיקיית היעד")
                 return
 
@@ -569,6 +582,7 @@ class MultiArchiveGUI:
         self.dest_entry.configure(state="disabled")
         dest_button = ArchiveButton(third_frame, text="בחר תיקיית יעד", command=self.select_dest_directory)
         dest_button.grid(row=3, column=0, pady=5, padx=10, sticky="nsew", columnspan=3)
+
 
         # ------------------------------------ forth frame ------------------------------------
         forth_frame = tk.CTkFrame(self.new_unloading_window_1, border_width=2)
@@ -882,8 +896,12 @@ class ItemDetailsWindow(tk.CTkToplevel):
         return extra_details_text
 
     def open_folder(self):
-        os.startfile(self.item.dest_path)
-
+        try:
+            os.startfile(self.item.dest_path)
+        except OSError as e:
+            CTkMessagebox(title="שגיאה", message="לא ניתן לפתוח את התיקייה", icon="error", option_1="סגור")
+            return
+        self.item.open_item()
     def edit_item(self):
         pass
 
@@ -986,11 +1004,11 @@ class ArchiveLabelButton(tk.CTkButton):
     def __init__(self, master, text, command, label, command_func, coordinates=(0, 0)):
         if command_func is None:
             super().__init__(master, text=text, command=lambda: None,
-                             font=(FONT, 9), width=50,
+                             font=(FONT, 12), width=50,
                              height=30, hover=True)
         else:
             super().__init__(master, text=text, command=lambda: command_func(label),
-                             font=(FONT, 9), width=50,
+                             font=(FONT, 12), width=50,
                              height=30, hover=True)
         self.label = label
         self.coordinates = coordinates

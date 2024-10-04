@@ -12,13 +12,22 @@ class Item:
         self.operation = operation
         self.pikud = pikud
         self.free_text = free_text
+        self.was_opened = 0
 
     def __str__(self):
+        if not hasattr(Item, 'was_opened'):
+            self.was_opened = 0
+
+
         return f"ID: {self.id}, Name: {self.name}, Date: {self.date}, Dest Path: {self.dest_path}," \
                f" Name of Charge: {self.name_of_charge}, Labels: {self.labels}, Thumbnail: {self.thumbnail}," \
-               f" Palga: {self.palga}, Operation: {self.operation}, Pikud: {self.pikud}, Free Text: {self.free_text}"
+               f" Palga: {self.palga}, Operation: {self.operation}, Pikud: {self.pikud}, Free Text: {self.free_text}," \
+               f" Was Opened: {self.was_opened} times"
 
     def __dic__(self):
+        if not hasattr(Item, 'was_opened'):
+            self.was_opened = 0
+
         return {
             "ID": self.id,
             "Name": self.name,
@@ -30,10 +39,21 @@ class Item:
             "Palga": self.palga,
             "Operation": self.operation,
             "Pikud": self.pikud,
-            "Free Text": self.free_text
+            "Free Text": self.free_text,
+            "Was Opened": self.was_opened
         }
 
     def print_item(self):
+        if not hasattr(Item, 'was_opened'):
+            self.was_opened = 0
         print(
             f"ID: {self.id}, Name: {self.name}, Date: {self.date}, Dest Path: {self.dest_path}, Name of Charge: {self.name_of_charge},"
-            f" Labels: {self.labels}, Free Text: {self.free_text}, Thumbnail: {self.thumbnail}, Palga: {self.palga}, Operation: {self.operation}, Pikud: {self.pikud}")
+            f" Labels: {self.labels}, Free Text: {self.free_text}, Thumbnail: {self.thumbnail}, Palga: {self.palga}, Operation: {self.operation}, Pikud: {self.pikud},"
+            f" Was Opened: {self.was_opened} times")
+
+    def open_item(self):
+        # checks if self.was_opened initialized
+        if not hasattr(Item, 'was_opened'):
+            self.was_opened = 0
+        self.was_opened += 1
+        print(f"Item {self.id} was opened {self.was_opened} times")
